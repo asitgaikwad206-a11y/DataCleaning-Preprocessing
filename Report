@@ -1,0 +1,84 @@
+Preprocessing Report for Movies Dataset
+This report details the preprocessing steps applied to the df DataFrame, which was loaded from the 'movies.csv' file. The goal of these steps was to clean the data, handle inconsistencies, and prepare it for further analysis.
+
+1. Initial Data Loading
+The dataset was initially loaded into a pandas DataFrame from the file /content/movies.csv.
+
+2. Handling Missing Values
+Missing values were identified using df.isnull().sum() and addressed as follows:
+
+'GENRE': Missing values were filled using the mode (most frequent value) of the column, as it is a categorical feature.
+'YEAR': Missing values were also filled using the mode of the column, treated as a categorical feature before type conversion.
+'RATING': Missing values were imputed using the mean of the column, as it is a numerical feature.
+'VOTES': This column initially contained string values with commas. Commas were first removed, and the column was converted to a float type. Subsequently, any remaining missing values were filled with the mean of the column.
+'RunTime': Missing values were filled using the mean of the column.
+'Gross': It was noted that the 'Gross' column had a very high number of missing values (9539 out of 9999 entries) and was effectively removed from consideration or dropped in an earlier implicit step, as it was not present after the initial null filling.
+3. Removing Duplicates
+Duplicate rows within the DataFrame were identified and removed using df.drop_duplicates(inplace=True), ensuring each record is unique.
+
+4. Cleaning and Type Conversion for 'YEAR'
+The 'YEAR' column contained string values with extra characters (e.g., '(2021)', '(2021– )'). The cleaning process involved:
+
+Extracting the 4-digit year using a regular expression r'(\d{4})'.
+Converting the extracted year strings to a numeric type, coercing errors to NaN.
+Finally, converting the numeric 'YEAR' column to an integer type.
+5. Cleaning 'GENRE'
+The 'GENRE' column was cleaned to remove inconsistencies and prepare it for analysis:
+
+Leading and trailing blank spaces were trimmed using .str.strip().
+Newline characters (\n) were removed using .str.replace('\n', '', regex=False).
+6. Extraction of 'Director' and 'Stars'
+Information for 'Director' and 'Stars' was embedded within the 'STARS' column. Regular expressions were used to extract this information into new, dedicated columns:
+
+'Director': Extracted using r'Director:\n\s*(.*?)(?:\n\| |\n\s*Stars:|$)'.
+'Stars': Extracted using r'Stars:\n\s*(.*)'.
+Both new columns ('Director' and 'Stars') had leading/trailing spaces trimmed and newline characters removed for cleanliness.
+7. Outlier Treatment
+Outliers in the numerical columns 'RATING', 'VOTES', and 'RunTime' were treated using the Interquartile Range (IQR) method:
+
+For each column, the first quartile (Q1) and third quartile (Q3) were calculated.
+The IQR was determined as Q3 - Q1.
+Upper bounds (Q3 + 1.5 * IQR) and lower bounds (Q1 - 1.5 * IQR) were established.
+Values falling outside these bounds were capped to the respective upper or lower bound, effectively minimizing the impact of extreme outliers while retaining the data points.
+Preprocessing Report for Movies Dataset
+This report details the preprocessing steps applied to the df DataFrame, which was loaded from the 'movies.csv' file. The goal of these steps was to clean the data, handle inconsistencies, and prepare it for further analysis.
+
+1. Initial Data Loading
+The dataset was initially loaded into a pandas DataFrame from the file /content/movies.csv.
+
+2. Handling Missing Values
+Missing values were identified using df.isnull().sum() and addressed as follows:
+
+'GENRE': Missing values were filled using the mode (most frequent value) of the column, as it is a categorical feature.
+'YEAR': Missing values were also filled using the mode of the column, treated as a categorical feature before type conversion.
+'RATING': Missing values were imputed using the mean of the column, as it is a numerical feature.
+'VOTES': This column initially contained string values with commas. Commas were first removed, and the column was converted to a float type. Subsequently, any remaining missing values were filled with the mean of the column.
+'RunTime': Missing values were filled using the mean of the column.
+'Gross': It was noted that the 'Gross' column had a very high number of missing values (9539 out of 9999 entries) and was effectively removed from consideration or dropped in an earlier implicit step, as it was not present after the initial null filling.
+3. Removing Duplicates
+Duplicate rows within the DataFrame were identified and removed using df.drop_duplicates(inplace=True), ensuring each record is unique.
+
+4. Cleaning and Type Conversion for 'YEAR'
+The 'YEAR' column contained string values with extra characters (e.g., '(2021)', '(2021– )'). The cleaning process involved:
+
+Extracting the 4-digit year using a regular expression r'(\d{4})'.
+Converting the extracted year strings to a numeric type, coercing errors to NaN.
+Finally, converting the numeric 'YEAR' column to an integer type.
+5. Cleaning 'GENRE'
+The 'GENRE' column was cleaned to remove inconsistencies and prepare it for analysis:
+
+Leading and trailing blank spaces were trimmed using .str.strip().
+Newline characters (\n) were removed using .str.replace('\n', '', regex=False).
+6. Extraction of 'Director' and 'Stars'
+Information for 'Director' and 'Stars' was embedded within the 'STARS' column. Regular expressions were used to extract this information into new, dedicated columns:
+
+'Director': Extracted using r'Director:\n\s*(.*?)(?:\n\| |\n\s*Stars:|$)'.
+'Stars': Extracted using r'Stars:\n\s*(.*)'.
+Both new columns ('Director' and 'Stars') had leading/trailing spaces trimmed and newline characters removed for cleanliness.
+7. Outlier Treatment
+Outliers in the numerical columns 'RATING', 'VOTES', and 'RunTime' were treated using the Interquartile Range (IQR) method:
+
+For each column, the first quartile (Q1) and third quartile (Q3) were calculated.
+The IQR was determined as Q3 - Q1.
+Upper bounds (Q3 + 1.5 * IQR) and lower bounds (Q1 - 1.5 * IQR) were established.
+Values falling outside these bounds were capped to the respective upper or lower bound, effectively minimizing the impact of extreme outliers while retaining the data points.
